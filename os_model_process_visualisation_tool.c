@@ -32,7 +32,7 @@ void display_processes(Process *processes, int num_processes, int current_time) 
     system("clear"); 
     printf("\nTime: %d\n", current_time);
     printf("PID\tState\t\tArrival\tBurst\tRemaining\n");
-    printf("--------------------------------------------\n");
+    printf("-----------------------------\n");
     for (int i = 0; i < num_processes; i++) {
         printf("%d\t", processes[i].pid);
         switch (processes[i].state) {
