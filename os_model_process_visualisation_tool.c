@@ -15,7 +15,7 @@ typedef struct {
     State state;       
     int arrival_time;  
     int burst_time;    
-    int remaining_time;
+    int rm_time;
 } Process;
 
 
@@ -24,7 +24,7 @@ void init_process(Process *p, int pid, int arrival, int burst) {
     p->state = READY;
     p->arrival_time = arrival;
     p->burst_time = burst;
-    p->remaining_time = burst;
+    p->rm_time = burst;
 }
 
 
@@ -41,7 +41,7 @@ void display_processes(Process *processes, int num_processes, int current_time) 
             case WAITING: printf("Waiting\t\t"); break;
             case TERMINATED: printf("Terminated\t"); break;
         }
-        printf("%d\t%d\t%d\n", processes[i].arrival_time, processes[i].burst_time, processes[i].remaining_time);
+        printf("%d\t%d\t%d\n", processes[i].arrival_time, processes[i].burst_time, processes[i].rm_time);
     }
     printf("\n");
 }
@@ -58,8 +58,8 @@ void simulate_processes(Process *processes, int num_processes) {
                     processes[i].state = RUNNING; 
                 }
                 if (processes[i].state == RUNNING) {
-                    processes[i].remaining_time -= TIME_QUANTUM;
-                    if (processes[i].remaining_time <= 0) {
+                    processes[i].rm_time -= TIME_QUANTUM;
+                    if (processes[i].rm_time <= 0) {
                         processes[i].state = TERMINATED; 
                         completed++;
                     } else if (rand() % 10 < 2) { // Randomly move to Waiting (20% chance)
