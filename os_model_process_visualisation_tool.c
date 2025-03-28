@@ -12,7 +12,7 @@ typedef enum { READY, RUNNING, WAITING, TERMINATED } State;
 
 typedef struct {
     int pid;          
-    State state;       
+    State st;       
     int arrival_time;  
     int burst_time;    
     int remaining_time;
@@ -21,7 +21,7 @@ typedef struct {
 
 void init_process(Process *p, int pid, int arrival, int burst) {
     p->pid = pid;
-    p->state = READY;
+    p->st = READY;
     p->arrival_time = arrival;
     p->burst_time = burst;
     p->remaining_time = burst;
@@ -35,7 +35,7 @@ void display_processes(Process *processes, int num_processes, int current_time) 
     printf("--------------------------------------------\n");
     for (int i = 0; i < num_processes; i++) {
         printf("%d\t", processes[i].pid);
-        switch (processes[i].state) {
+        switch (processes[i].st) {
             case READY: printf("Ready\t\t"); break;
             case RUNNING: printf("Running\t\t"); break;
             case WAITING: printf("Waiting\t\t"); break;
@@ -53,21 +53,21 @@ void simulate_processes(Process *processes, int num_processes) {
 
     while (completed < num_processes) {
         for (int i = 0; i < num_processes; i++) {
-            if (processes[i].arrival_time <= current_time && processes[i].state != TERMINATED) {
-                if (processes[i].state == READY) {
-                    processes[i].state = RUNNING; 
+            if (processes[i].arrival_time <= current_time && processes[i].st != TERMINATED) {
+                if (processes[i].st == READY) {
+                    processes[i].st = RUNNING; 
                 }
-                if (processes[i].state == RUNNING) {
+                if (processes[i].st == RUNNING) {
                     processes[i].remaining_time -= TIME_QUANTUM;
                     if (processes[i].remaining_time <= 0) {
-                        processes[i].state = TERMINATED; 
+                        processes[i].st = TERMINATED; 
                         completed++;
                     } else if (rand() % 10 < 2) { // Randomly move to Waiting (20% chance)
-                        processes[i].state = WAITING;
+                        processes[i].st = WAITING;
                     }
-                } else if (processes[i].state == WAITING) {
+                } else if (processes[i].st == WAITING) {
                     if (rand() % 10 < 3) {
-                        processes[i].state = READY;
+                        processes[i].st = READY;
                     }
                 }
             }
@@ -93,6 +93,6 @@ int main() {
     sleep(2); 
     simulate_processes(processes, MAX_PROCESSES);
 
-    printf("All processes completed!\n");
+    printf("All the processes are completed!\n");
     return 0;
 }
